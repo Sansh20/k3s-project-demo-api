@@ -10,8 +10,9 @@ const k8sApi = kc.makeApiClient(k8s.CoreV1Api);
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
-  
-  res.send(k8sApi);
+  k8sApi.listNamespacedPod('default').then((res) => {
+    console.log(res.response);
+});
 });
 
 module.exports = router;
