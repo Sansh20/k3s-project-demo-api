@@ -13,7 +13,6 @@ router.get('/', function(req, res, next) {
   k8sApi.listNamespacedPod('default').then((resIn) => {
     res.send(resIn.body);
 });
-  res.send('respond with a resource');
 });
 
 module.exports = router;
