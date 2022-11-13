@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: samp-api
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: samp-api
+  template:
+    metadata:
+      labels:
+        app: samp-api
+    spec:
+      tolerations:
+      - key: "node.kubernetes.io/unreachable"
+        operator: "Exists"
+        effect: "NoExecute"
+        tolerationSeconds: 10
+      - key: "node.kubernetes.io/not-ready"
+        operator: "Exists"
+        effect: "NoExecute"
+        tolerationSeconds: 10
+      containers:
+        - name: samp-api
+          image: sansh20/kubernetes-demo-api
+          imagePullPolicy: Always
+          ports:
+          - containerPort: 3000
+            name: web
+            protocol: TCP
+          readinessProbe:
+            httpGet:
+              port: web
+              path: /
+          resources:
+            limits:
+              cpu: 500m
+            requests:
+              cpu: 200m

@@ -1,0 +1,37 @@
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  creationTimestamp: "2022-11-03T09:53:46Z"
+  name: samp-api
+  namespace: default
+  resourceVersion: "99692"
+  uid: 46215723-943a-4da8-8879-ad56c477725d
+spec:
+  behavior:
+    scaleDown:
+      policies:
+      - periodSeconds: 10
+        type: Pods
+        value: 2
+      selectPolicy: Max
+      stabilizationWindowSeconds: 10
+    scaleUp:
+      policies:
+      - periodSeconds: 5
+        type: Percent
+        value: 300
+      selectPolicy: Max
+      stabilizationWindowSeconds: 0
+  maxReplicas: 10
+  metrics:
+  - resource:
+      name: cpu
+      target:
+        averageUtilization: 30
+        type: Utilization
+    type: Resource
+  minReplicas: 3
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: samp-api
